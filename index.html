@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#061b12">
+
+<title>Public Connect</title>
+
+<link rel="manifest" href="manifest.json">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<style>
+:root {
+  --bg: #06130d;
+  --panel: #0d2117;
+  --panel2: #122b1e;
+  --green: #00e676;
+  --text: #f1fff5;
+  --muted: #9bb4a4;
+  --border: #244432;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #081a11;
+  border-bottom: 1px solid var(--border);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  color: var(--green);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.logo span {
+  color: white;
+}
+
+.header-btn {
+  background: var(--panel2);
+  color: white;
+  border: 1px solid var(--border);
+  padding: 9px 12px;
+  border-radius: 10px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 14px;
+  padding-bottom: 100px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 14px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.primary {
+  background: var(--green);
+  color: #032012;
+  font-weight: bold;
+  padding: 12px 16px;
+  border-radius: 11px;
+}
+
+.secondary {
+  background: var(--panel2);
+  color: white;
+  border: 1px solid var(--border);
+  padding: 11px 14px;
+  border-radius: 10px;
+}
+
+.danger {
+  background: #451b1b;
+  color: #ffaaaa;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.full {
+  width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0;
+  background: #07170e;
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 85px;
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: #081a11;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 9px 2px;
+}
+
+.nav button {
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 5px;
+}
+
+.nav button.active {
+  color: var(--green);
+}
+
+.nav .icon {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 3px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #17462c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-right: 8px;
+}
+
+.post-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.post-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat {
+  background: #10291c;
+  border-radius: 12px;
+  padding: 13px;
+  flex: 1;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 23px;
+  color: var(--green);
+}
+
+.option {
+  width: 100%;
+  text-align: left;
+  background: #122b1e;
+  border: 1px solid var(--border);
+  color: white;
+  padding: 12px;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 400px;
+  background: var(--panel);
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+#authScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.notice {
+  background: #183523;
+  border: 1px solid #326744;
+  padding: 11px;
+  border-radius: 10px;
+  color: #caffd9;
+  font-size: 13px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 15px 0;
+}
+
+@media(min-width:700px) {
+  .container {
+    padding-top: 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN AND SIGNUP -->
+
+<section id="authScreen">
+  <div class="auth-box">
+
+    <div class="logo" style="text-align:center;font-size:30px">
+      PUBLIC <span>CONNECT</span>
+    </div>
+
+    <p class="muted" style="text-align:center">
+      Connect • Discuss • Participate
+    </p>
+
+    <div id="loginForm">
+      <h2>Welcome Back</h2>
+
+      <input id="loginEmail" type="email" placeholder="Email Address">
+      <input id="loginPassword" type="password" placeholder="Password">
+
+      <button class="primary full" onclick="login()">Login</button>
+
+      <button class="secondary full" style="margin-top:8px"
+        onclick="googleLogin()">
+        Continue with Google
+      </button>
+
+      <p class="muted">
+        Don't have an account?
+        <a href="#" onclick="showSignup()" style="color:var(--green)">
+          Sign Up
+        </a>
+      </p>
+    </div>
+
+    <div id="signupForm" class="hidden">
+      <h2>Create Account</h2>
+
+      <input id="signupName" placeholder="Full Name">
+      <input id="signupEmail" type="email" placeholder="Email Address">
+      <input id="signupPassword" type="password" placeholder="Password">
+
+      <button class="primary full" onclick="signup()">
+        Create Account
+      </button>
+
+      <p class="muted">
+        Already have an account?
+        <a href="#" onclick="showLogin()" style="color:var(--green)">
+          Login
+        </a>
+      </p>
+    </div>
+
+    <p id="authMessage" class="muted"></p>
+  </div>
+</section>
+
+<!-- MAIN APPLICATION -->
+
+<div id="app" class="hidden">
+
+<header>
+  <div class="logo">PUBLIC <span>CONNECT</span></div>
+
+  <div>
+    <button class="header-btn" onclick="showPage('notifications')">
+      🔔
+    </button>
+
+    <button class="header-btn" onclick="showPage('settings')">
+      ⚙️
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+  <div class="card">
+    <h2>Welcome to Public Connect</h2>
+
+    <p class="muted">
+      Your Community. Your Voice.
+    </p>
+
+    <div class="row">
+      <div class="stat">
+        <strong id="homePostCount">0</strong>
+        <span class="muted">Posts</span>
+      </div>
+
+      <div class="stat">
+        <strong id="homePollCount">0</strong>
+        <span class="muted">Polls</span>
+      </div>
+
+      <div class="stat">
+        <strong id="homeMemberCount">0</strong>
+        <span class="muted">Members</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Create a Post</h3>
+
+    <textarea id="postText"
+      maxlength="1000"
+      placeholder="What's on your mind?">
+    </textarea>
+
+    <button class="primary full" onclick="createPost()">
+      Publish Post
+    </button>
+
+    <p class="muted">
+      Text-only posts. Photo and video uploads are disabled.
+    </p>
+  </div>
+
+  <h3>Community Feed</h3>
+
+  <div id="postsList">
+    <p class="muted">Loading posts...</p>
+  </div>
+
+</section>
+
+<!-- POLLS -->
+
+<section id="polls" class="page">
+  <h2>Public Polls</h2>
+
+  <p class="muted">
+    Share your opinion by participating in community polls.
+  </p>
+
+  <div id="pollList"></div>
+</section>
+
+<!-- QUIZ -->
+
+<section id="quiz" class="page">
+  <h2>Daily Quiz</h2>
+
+  <p class="muted">
+    Learn something new and collect community points.
+  </p>
+
+  <div id="quizList"></div>
+</section>
+
+<!-- CHAT -->
+
+<section id="chat" class="page">
+  <h2>Community Chat</h2>
+
+  <div class="card">
+
+    <div id="chatMessages"
+      style="max-height:350px;overflow-y:auto">
+      <p class="muted">Loading messages...</p>
+    </div>
+
+    <hr>
+
+    <textarea id="chatText"
+      maxlength="500"
+      placeholder="Write a message...">
+    </textarea>
+
+    <button class="primary full" onclick="sendChat()">
+      Send Message
+    </button>
+
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+
+<section id="leaderboard" class="page">
+  <h2>Leaderboard</h2>
+
+  <div class="card">
+    <p class="muted">
+      Community ranking based on points.
+    </p>
+
+    <div id="leaderboardList"></div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+
+<section id="profile" class="page">
+  <h2>My Profile</h2>
+
+  <div class="card">
+
+    <div class="row">
+      <div class="avatar" id="profileAvatar">👤</div>
+
+      <div>
+        <h3 id="profileName">Member</h3>
+        <p class="muted" id="profileEmail"></p>
+      </div>
+    </div>
+
+    <hr>
+
+    <label>Display Name</label>
+    <input id="editName" placeholder="Your Name">
+
+    <label>Choose Avatar</label>
+
+    <select id="editAvatar">
+      <option>👤</option>
+      <option>🧑</option>
+      <option>👨</option>
+      <option>👩</option>
+      <option>🦁</option>
+      <option>⭐</option>
+      <option>🌟</option>
+      <option>🚀</option>
+      <option>🌍</option>
+    </select>
+
+    <button class="primary full" onclick="saveProfile()">
+      Save Profile
+    </button>
+
+    <hr>
+
+    <button class="danger full" onclick="logout()">
+      Logout
+    </button>
+
+  </div>
+</section>
+
+<!-- NOTIFICATIONS -->
+
+<section id="notifications" class="page">
+  <h2>Notifications</h2>
+
+  <div class="card">
+    <p class="muted">
+      You currently have no new notifications.
+    </p>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+
+<section id="settings" class="page">
+  <h2>Settings</h2>
+
+  <div class="card">
+    <h3>Account Settings</h3>
+
+    <button class="secondary full"
+      onclick="showPage('profile')">
+      Edit Profile
+    </button>
+
+    <button class="secondary full"
+      style="margin-top:8px"
+      onclick="logout()">
+      Logout
+    </button>
+
+    <hr>
+
+    <h3>About Public Connect</h3>
+
+    <p class="muted">
+      Public Connect is a text-based community platform
+      designed for discussion, participation and learning.
+    </p>
+
+    <p class="muted">
+      Harassment, threats and sharing private information
+      are not allowed.
+    </p>
+  </div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+
+<section id="admin" class="page">
+  <h2>Admin Dashboard</h2>
+
+  <div class="notice">
+    Authorized administrators only.
+  </div>
+
+  <div class="row" style="margin-top:12px">
+
+    <div class="stat">
+      <strong id="adminUsers">0</strong>
+      <span class="muted">Users</span>
+    </div>
+
+    <div class="stat">
+      <strong id="adminPosts">0</strong>
+      <span class="muted">Posts</span>
+    </div>
+
+    <div class="stat">
+      <strong id="adminPolls">0</strong>
+      <span class="muted">Polls</span>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>Create Poll</h3>
+
+    <input id="pollQuestion" placeholder="Poll Question">
+    <input id="pollOption1" placeholder="Option 1">
+    <input id="pollOption2" placeholder="Option 2">
+    <input id="pollOption3" placeholder="Option 3 (Optional)">
+
+    <button class="primary full" onclick="createPoll()">
+      Publish Poll
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>Create Quiz</h3>
+
+    <input id="quizQuestion" placeholder="Quiz Question">
+    <input id="quizOption1" placeholder="Option 1">
+    <input id="quizOption2" placeholder="Option 2">
+    <input id="quizOption3" placeholder="Option 3">
+    <input id="quizOption4" placeholder="Option 4">
+
+    <label class="muted">Correct Answer</label>
+
+    <select id="quizCorrect">
+      <option value="0">Option 1</option>
+      <option value="1">Option 2</option>
+      <option value="2">Option 3</option>
+      <option value="3">Option 4</option>
+    </select>
+
+    <button class="primary full" onclick="createQuiz()">
+      Publish Quiz
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>Advertisement Space</h3>
+
+    <p class="muted">
+      This is a placeholder. Actual ads require an approved
+      advertising account and a secure integration.
+    </p>
+
+    <div class="notice">
+      Sponsored Advertisement
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="nav">
+
+  <button class="active" onclick="showPage('home',this)">
+    <span class="icon">⌂</span>Home
+  </button>
+
+  <button onclick="showPage('polls',this)">
+    <span class="icon">📊</span>Polls
+  </button>
+
+  <button onclick="showPage('quiz',this)">
+    <span class="icon">🧠</span>Quiz
+  </button>
+
+  <button onclick="showPage('chat',this)">
+    <span class="icon">💬</span>Chat
+  </button>
+
+  <button onclick="showPage('leaderboard',this)">
+    <span class="icon">🏆</span>Rank
+  </button>
+
+  <button onclick="showPage('profile',this)">
+    <span class="icon">👤</span>Profile
+  </button>
+
+</nav>
+
+</div>
+
+<script>
+
+/* ======================================
+   FIREBASE CONFIGURATION
+   Replace these values with your own
+   Firebase Web App configuration.
+====================================== */
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+/* Set your administrator email here. */
+const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@example.com";
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+let currentProfile = {};
+
+/* AUTHENTICATION */
+
+function showSignup() {
+  document.getElementById("loginForm").classList.add("hidden");
+  document.getElementById("signupForm").classList.remove("hidden");
+}
+
+function showLogin() {
+  document.getElementById("signupForm").classList.add("hidden");
+  document.getElementById("loginForm").classList.remove("hidden");
+}
+
+function authMessage(message) {
+  document.getElementById("authMessage").textContent = message;
+}
+
+async function signup() {
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+
+  if (!name || !email || password.length < 6) {
+    authMessage("Enter your name, email and a password of at least 6 characters.");
+    return;
+  }
+
+  try {
+    const result = await auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+
+    await db.collection("users").doc(result.user.uid).set({
+      name: name,
+      email: email,
+      avatar: "👤",
+      points: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+  } catch(error) {
+    authMessage(error.message);
+  }
+}
+
+async function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  try {
+    await auth.signInWithEmailAndPassword(email,password);
+  } catch(error) {
+    authMessage(error.message);
+  }
+}
+
+async function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  try {
+    await auth.signInWithPopup(provider);
+  } catch(error) {
+    authMessage(error.message);
+  }
+}
+
+async function logout() {
+  await auth.signOut();
+}
+
+/* AUTH STATE */
+
+auth.onAuthStateChanged(async user => {
+
+  currentUser = user;
+
+  if (!user) {
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("authScreen").style.display = "flex";
+    return;
+  }
+
+  document.getElementById("authScreen").style.display = "none";
+  document.getElementById("app").classList.remove("hidden");
+
+  const userRef = db.collection("users").doc(user.uid);
+  const userSnap = await userRef.get();
+
+  if (!userSnap.exists) {
+    await userRef.set({
+      name: user.displayName || user.email.split("@")[0],
+      email: user.email,
+      avatar: "👤",
+      points: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
+
+  await loadProfile();
+
+  loadPosts();
+  loadPolls();
+  loadQuizzes();
+  loadChat();
+  loadLeaderboard();
+  loadHomeStats();
+
+  if (user.email === ADMIN_EMAIL) {
+    loadAdminStats();
+  }
+
+});
+
+/* PAGE NAVIGATION */
+
+function showPage(page,button) {
+
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  const target = document.getElementById(page);
+
+  if (target) {
+    target.classList.add("active");
+  }
+
+  document.querySelectorAll(".nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if (button) {
+    button.classList.add("active");
+  }
+}
+
+/* PROFILE */
+
+async function loadProfile() {
+
+  const snap = await db.collection("users")
+    .doc(currentUser.uid).get();
+
+  currentProfile = snap.data() || {};
+
+  document.getElementById("profileName").textContent =
+    currentProfile.name || "Member";
+
+  document.getElementById("profileEmail").textContent =
+    currentUser.email;
+
+  document.getElementById("profileAvatar").textContent =
+    currentProfile.avatar || "👤";
+
+  document.getElementById("editName").value =
+    currentProfile.name || "";
+
+  document.getElementById("editAvatar").value =
+    currentProfile.avatar || "👤";
+}
+
+async function saveProfile() {
+
+  const name = document.getElementById("editName").value.trim();
+  const avatar = document.getElementById("editAvatar").value;
+
+  if (!name) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  await db.collection("users").doc(currentUser.uid).update({
+    name: name,
+    avatar: avatar
+  });
+
+  await loadProfile();
+
+  alert("Profile updated successfully!");
+}
+
+/* POSTS */
+
+async function createPost() {
+
+  const text = document.getElementById("postText").value.trim();
+
+  if (!text) {
+    alert("Please write something.");
+    return;
+  }
+
+  if (text.length > 1000) {
+    alert("Your post is too long.");
+    return;
+  }
+
+  try {
+
+    await db.collection("posts").add({
+      text: text,
+      uid: currentUser.uid,
+      name: currentProfile.name || "Member",
+      avatar: currentProfile.avatar || "👤",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("postText").value = "";
+
+    alert("Post published successfully!");
+
+  } catch(error) {
+    alert(error.message);
+  }
+}
+
+function loadPosts() {
+
+  db.collection("posts")
+    .orderBy("createdAt","desc")
+    .limit(50)
+    .onSnapshot(snapshot => {
+
+      const box = document.getElementById("postsList");
+      box.innerHTML = "";
+
+      snapshot.forEach(doc => {
+
+        const post = doc.data();
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const head = document.createElement("div");
+        head.className = "post-head";
+
+        const avatar = document.createElement("span");
+        avatar.className = "avatar";
+        avatar.textContent = post.avatar || "👤";
+
+        const name = document.createElement("strong");
+        name.textContent = post.name || "Member";
+
+        head.append(avatar,name);
+
+        const content = document.createElement("p");
+        content.className = "post-text";
+        content.textContent = post.text || "";
+
+        card.append(head,content);
+        box.appendChild(card);
+
+      });
+
+      document.getElementById("homePostCount").textContent =
+        snapshot.size;
+
+    },error => console.error(error));
+
+}
+
+/* POLLS */
+
+async function createPoll() {
+
+  if (currentUser.email !== ADMIN_EMAIL) {
+    alert("Administrator access required.");
+    return;
+  }
+
+  const question = document.getElementById("pollQuestion").value.trim();
+
+  const options = [
+    document.getElementById("pollOption1").value.trim(),
+    document.getElementById("pollOption2").value.trim(),
+    document.getElementById("pollOption3").value.trim()
+  ].filter(Boolean);
+
+  if (!question || options.length < 2) {
+    alert("Enter a question and at least two options.");
+    return;
+  }
+
+  await db.collection("polls").add({
+    question: question,
+    options: options,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert("Poll published successfully!");
+}
+
+function loadPolls() {
+
+  db.collection("polls")
+    .orderBy("createdAt","desc")
+    .onSnapshot(snapshot => {
+
+      const box = document.getElementById("pollList");
+      box.innerHTML = "";
+
+      snapshot.forEach(doc => {
+
+        const poll = doc.data();
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const title = document.createElement("h3");
+        title.textContent = poll.question;
+
+        card.appendChild(title);
+
+        (poll.options || []).forEach((option,index) => {
+
+          const button = document.createElement("button");
+          button.className = "option";
+          button.textContent = option;
+
+          button.onclick = () => vote(doc.id,index);
+
+          card.appendChild(button);
+
+        });
+
+        box.appendChild(card);
+
+      });
+
+      document.getElementById("homePollCount").textContent =
+        snapshot.size;
+
+    });
+
+}
+
+async function vote(pollId,index) {
+
+  const ref = db.collection("polls")
+    .doc(pollId)
+    .collection("votes")
+    .doc(currentUser.uid);
+
+  try {
+
+    await ref.set({
+      option: index,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("Your vote has been recorded.");
+
+  } catch(error) {
+    alert(error.message);
+  }
+
+}
+
+/* QUIZ */
+
+async function createQuiz() {
+
+  if (currentUser.email !== ADMIN_EMAIL) {
+    alert("Administrator access required.");
+    return;
+  }
+
+  const question = document.getElementById("quizQuestion").value.trim();
+
+  const options = [
+    document.getElementById("quizOption1").value.trim(),
+    document.getElementById("quizOption2").value.trim(),
+    document.getElementById("quizOption3").value.trim(),
+    document.getElementById("quizOption4").value.trim()
+  ];
+
+  if (!question || options.some(option => !option)) {
+    alert("Please complete the question and all four options.");
+    return;
+  }
+
+  const correctIndex =
+    Number(document.getElementById("quizCorrect").value);
+
+  await db.collection("quizzes").add({
+    question: question,
+    options: options,
+    correctIndex: correctIndex,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert("Quiz published!");
+}
+
+function loadQuizzes() {
+
+  db.collection("quizzes")
+    .orderBy("createdAt","desc")
+    .limit(20)
+    .onSnapshot(snapshot => {
+
+      const box = document.getElementById("quizList");
+      box.innerHTML = "";
+
+      snapshot.forEach(doc => {
+
+        const quiz = doc.data();
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const title = document.createElement("h3");
+        title.textContent = quiz.question;
+
+        card.appendChild(title);
+
+        (quiz.options || []).forEach((option,index) => {
+
+          const button = document.createElement("button");
+          button.className = "option";
+          button.textContent = option;
+
+          button.onclick = () => {
+            alert("Secure quiz scoring will require a server-side function.");
+          };
+
+          card.appendChild(button);
+
+        });
+
+        box.appendChild(card);
+
+      });
+
+    });
+
+}
+
+/* COMMUNITY CHAT */
+
+function loadChat() {
+
+  db.collection("chat")
+    .orderBy("createdAt","asc")
+    .limit(100)
+    .onSnapshot(snapshot => {
+
+      const box = document.getElementById("chatMessages");
+      box.innerHTML = "";
+
+      snapshot.forEach(doc => {
+
+        const message = doc.data();
+
+        const item = document.createElement("div");
+        item.style.padding = "8px";
+        item.style.borderBottom = "1px solid #244432";
+
+        const name = document.createElement("strong");
+        name.textContent = message.name || "Member";
+
+        const text = document.createElement("p");
+        text.textContent = message.text || "";
+        text.style.margin = "5px 0";
+
+        item.append(name,text);
+        box.appendChild(item);
+
+      });
+
+      box.scrollTop = box.scrollHeight;
+
+    });
+
+}
+
+async function sendChat() {
+
+  const text = document.getElementById("chatText").value.trim();
+
+  if (!text) return;
+
+  if (text.length > 500) {
+    alert("Message is too long.");
+    return;
+  }
+
+  try {
+
+    await db.collection("chat").add({
+      text: text,
+      uid: currentUser.uid,
+      name: currentProfile.name || "Member",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("chatText").value = "";
+
+  } catch(error) {
+    alert(error.message);
+  }
+
+}
+
+/* LEADERBOARD */
+
+function loadLeaderboard() {
+
+  db.collection("users")
+    .orderBy("points","desc")
+    .limit(20)
+    .onSnapshot(snapshot => {
+
+      const box = document.getElementById("leaderboardList");
+      box.innerHTML = "";
+
+      let rank = 1;
+
+      snapshot.forEach(doc => {
+
+        const user = doc.data();
+
+        const item = document.createElement("div");
+        item.className = "row";
+        item.style.padding = "12px 0";
+        item.style.borderBottom = "1px solid #244432";
+
+        const position = document.createElement("strong");
+        position.textContent = "#" + rank++;
+
+        const avatar = document.createElement("span");
+        avatar.className = "avatar";
+        avatar.textContent = user.avatar || "👤";
+
+        const name = document.createElement("span");
+        name.textContent = user.name || "Member";
+
+        const points = document.createElement("span");
+        points.className = "badge";
+        points.textContent = (user.points || 0) + " Points";
+
+        item.append(position,avatar,name,points);
+        box.appendChild(item);
+
+      });
+
+    });
+
+}
+
+/* HOME STATISTICS */
+
+async function loadHomeStats() {
+
+  try {
+
+    const users = await db.collection("users").get();
+
+    document.getElementById("homeMemberCount").textContent =
+      users.size;
+
+  } catch(error) {
+    console.error(error);
+  }
+
+}
+
+/* ADMIN DASHBOARD */
+
+async function loadAdminStats() {
+
+  if (currentUser.email !== ADMIN_EMAIL) return;
+
+  document.getElementById("admin").classList.remove("hidden");
+
+  const users = await db.collection("users").get();
+  const posts = await db.collection("posts").get();
+  const polls = await db.collection("polls").get();
+
+  document.getElementById("adminUsers").textContent = users.size;
+  document.getElementById("adminPosts").textContent = posts.size;
+  document.getElementById("adminPolls").textContent = polls.size;
+
+}
+
+/* SERVICE WORKER */
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker.register("./sw.js")
+      .catch(error => console.log("Service Worker:",error));
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
