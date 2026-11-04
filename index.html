@@ -2,1309 +2,1627 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b12">
 
-<title>Public Connect</title>
+<title>PUBLIC CONNECT</title>
 
 <link rel="manifest" href="manifest.json">
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-
 <style>
 :root {
-  --bg: #06130d;
-  --panel: #0d2117;
-  --panel2: #122b1e;
-  --green: #00e676;
-  --text: #f1fff5;
-  --muted: #9bb4a4;
-  --border: #244432;
+  --bg:#020b07;
+  --card:#0b1c13;
+  --green:#00e676;
+  --text:#ffffff;
+  --muted:#9aafa3;
+  --border:#1b3526;
 }
 
 * {
-  box-sizing: border-box;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-}
-
-button, input, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
+  background:var(--bg);
+  color:var(--text);
+  padding-bottom:80px;
 }
 
 header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #081a11;
-  border-bottom: 1px solid var(--border);
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background:#06130d;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
 .logo {
-  color: var(--green);
-  font-size: 22px;
-  font-weight: 900;
-}
-
-.logo span {
-  color: white;
-}
-
-.header-btn {
-  background: var(--panel2);
-  color: white;
-  border: 1px solid var(--border);
-  padding: 9px 12px;
-  border-radius: 10px;
+  color:var(--green);
+  font-size:20px;
+  font-weight:bold;
 }
 
 .container {
-  max-width: 700px;
-  margin: auto;
-  padding: 14px;
-  padding-bottom: 100px;
+  max-width:650px;
+  margin:auto;
+  padding:15px;
 }
 
 .card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 15px;
-  margin-bottom: 14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:14px;
 }
 
-.muted {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.primary {
-  background: var(--green);
-  color: #032012;
-  font-weight: bold;
-  padding: 12px 16px;
-  border-radius: 11px;
-}
-
-.secondary {
-  background: var(--panel2);
-  color: white;
-  border: 1px solid var(--border);
-  padding: 11px 14px;
-  border-radius: 10px;
-}
-
-.danger {
-  background: #451b1b;
-  color: #ffaaaa;
-  padding: 10px;
-  border-radius: 9px;
-}
-
-.full {
-  width: 100%;
-}
-
-.hidden {
-  display: none !important;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 13px;
-  margin: 7px 0;
-  background: #07170e;
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  outline: none;
+input,textarea {
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  background:#10251a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:white;
+  outline:none;
 }
 
 textarea {
-  resize: vertical;
-  min-height: 85px;
+  min-height:90px;
 }
 
-.nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 20;
-  background: #081a11;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-around;
-  padding: 9px 2px;
+button,.btn {
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  text-align:center;
 }
 
-.nav button {
-  background: transparent;
-  color: var(--muted);
-  font-size: 11px;
-  padding: 5px;
+.primary {
+  background:var(--green);
+  color:#00180a;
 }
 
-.nav button.active {
-  color: var(--green);
+.secondary {
+  background:#183326;
+  color:white;
 }
 
-.nav .icon {
-  display: block;
-  font-size: 21px;
-  margin-bottom: 3px;
+.full {
+  width:100%;
+  margin:5px 0;
+}
+
+.hidden {
+  display:none!important;
 }
 
 .page {
-  display: none;
+  display:none;
 }
 
 .page.active {
-  display: block;
+  display:block;
+}
+
+.muted {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.phone-row {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.country {
+  padding:14px;
+  background:#10251a;
+  border-radius:10px;
+  white-space:nowrap;
 }
 
 .avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #17462c;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin-right: 8px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#173c27;
+  color:white;
+  font-size:25px;
+  margin:4px;
 }
 
-.post-head {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
+.avatar.selected {
+  border:2px solid var(--green);
 }
 
-.post-text {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  line-height: 1.5;
+.nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:68px;
+  background:#07150e;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.nav button {
+  background:none;
+  color:white;
+  font-size:11px;
+  padding:8px 4px;
 }
 
-.stat {
-  background: #10291c;
-  border-radius: 12px;
-  padding: 13px;
-  flex: 1;
-  text-align: center;
+.nav button.active {
+  color:var(--green);
 }
 
-.stat strong {
-  display: block;
-  font-size: 23px;
-  color: var(--green);
+.choice {
+  width:100%;
+  text-align:left;
+  background:#10251a;
+  color:white;
+  margin:5px 0;
 }
 
-.option {
-  width: 100%;
-  text-align: left;
-  background: #122b1e;
-  border: 1px solid var(--border);
-  color: white;
-  padding: 12px;
-  margin: 5px 0;
-  border-radius: 10px;
+#recaptcha-container {
+  margin:10px 0;
 }
 
-.auth-box {
-  width: 100%;
-  max-width: 400px;
-  background: var(--panel);
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
+.tag {
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:20px;
+  background:#123c26;
+  color:var(--green);
+  font-size:12px;
 }
 
-#authScreen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
+/* Hide APK download button inside installed app */
+@media (display-mode:standalone) {
+  #apkWebsiteButton {display:none!important;}
 }
 
-.notice {
-  background: #183523;
-  border: 1px solid #326744;
-  padding: 11px;
-  border-radius: 10px;
-  color: #caffd9;
-  font-size: 13px;
-}
-
-hr {
-  border: 0;
-  border-top: 1px solid var(--border);
-  margin: 15px 0;
-}
-
-@media(min-width:700px) {
-  .container {
-    padding-top: 22px;
-  }
+@media (display-mode:fullscreen) {
+  #apkWebsiteButton {display:none!important;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN AND SIGNUP -->
+<header>
+  <div class="logo">◉ PUBLIC CONNECT</div>
+  <button class="secondary" id="bellBtn">🔔</button>
+</header>
 
-<section id="authScreen">
-  <div class="auth-box">
+<!-- WEBSITE ONLY APK DOWNLOAD -->
+<div id="apkWebsiteButton" class="container">
+  <a class="primary full"
+     style="display:block;text-decoration:none"
+     href="./downloads/public-connect.apk"
+     download="PUBLIC-CONNECT.apk">
+     Download
+  </a>
+</div>
 
-    <div class="logo" style="text-align:center;font-size:30px">
-      PUBLIC <span>CONNECT</span>
-    </div>
+<!-- LOGIN -->
+<section id="authScreen" class="container">
 
-    <p class="muted" style="text-align:center">
-      Connect • Discuss • Participate
-    </p>
+<div class="card">
 
-    <div id="loginForm">
-      <h2>Welcome Back</h2>
+<h1 style="text-align:center;color:#00e676">
+PUBLIC CONNECT
+</h1>
 
-      <input id="loginEmail" type="email" placeholder="Email Address">
-      <input id="loginPassword" type="password" placeholder="Password">
+<p class="muted" style="text-align:center">
+Your Community. Your Voice.
+</p>
 
-      <button class="primary full" onclick="login()">Login</button>
+<h3>Continue with Mobile Number</h3>
 
-      <button class="secondary full" style="margin-top:8px"
-        onclick="googleLogin()">
-        Continue with Google
-      </button>
+<div class="phone-row">
+  <span class="country">🇮🇳 +91</span>
+  <input id="phone"
+         type="tel"
+         inputmode="numeric"
+         maxlength="10"
+         placeholder="Enter Mobile Number">
+</div>
 
-      <p class="muted">
-        Don't have an account?
-        <a href="#" onclick="showSignup()" style="color:var(--green)">
-          Sign Up
-        </a>
-      </p>
-    </div>
+<div id="recaptcha-container"></div>
 
-    <div id="signupForm" class="hidden">
-      <h2>Create Account</h2>
+<button class="primary full" id="sendOtp">
+CONTINUE
+</button>
 
-      <input id="signupName" placeholder="Full Name">
-      <input id="signupEmail" type="email" placeholder="Email Address">
-      <input id="signupPassword" type="password" placeholder="Password">
+<div id="otpArea" class="hidden">
 
-      <button class="primary full" onclick="signup()">
-        Create Account
-      </button>
+<input id="otp"
+       maxlength="6"
+       inputmode="numeric"
+       placeholder="Enter OTP">
 
-      <p class="muted">
-        Already have an account?
-        <a href="#" onclick="showLogin()" style="color:var(--green)">
-          Login
-        </a>
-      </p>
-    </div>
+<button class="primary full" id="verifyOtp">
+VERIFY OTP
+</button>
 
-    <p id="authMessage" class="muted"></p>
-  </div>
+</div>
+
+<hr style="border-color:#1b3526;margin:15px 0">
+
+<button class="secondary full" id="googleBtn">
+Continue with Google
+</button>
+
+<button class="secondary full" id="toggleEmail">
+Continue with Email
+</button>
+
+<div id="emailArea" class="hidden">
+
+<input id="email" type="email"
+       placeholder="Email Address">
+
+<input id="password" type="password"
+       placeholder="Password">
+
+<button class="primary full" id="emailSignup">
+Create Account
+</button>
+
+<button class="secondary full" id="emailLogin">
+Login
+</button>
+
+<button class="secondary full" id="resetPassword">
+Forgot Password?
+</button>
+
+</div>
+
+<p class="muted">
+Your mobile number is private and is not displayed on your public profile.
+</p>
+
+</div>
 </section>
 
-<!-- MAIN APPLICATION -->
+<!-- PROFILE SETUP -->
+<section id="profileSetup" class="container hidden">
 
-<div id="app" class="hidden">
+<div class="card">
 
-<header>
-  <div class="logo">PUBLIC <span>CONNECT</span></div>
+<h2>Create Your Profile</h2>
 
-  <div>
-    <button class="header-btn" onclick="showPage('notifications')">
-      🔔
-    </button>
+<input id="newName" placeholder="Your Name">
 
-    <button class="header-btn" onclick="showPage('settings')">
-      ⚙️
-    </button>
-  </div>
-</header>
+<input id="newUsername"
+       placeholder="Username">
+
+<h3>Select Avatar</h3>
+
+<div id="avatarPicker">
+
+<button class="avatar selected" data-avatar="🙂">🙂</button>
+<button class="avatar" data-avatar="😎">😎</button>
+<button class="avatar" data-avatar="👑">👑</button>
+<button class="avatar" data-avatar="🌟">🌟</button>
+<button class="avatar" data-avatar="🚀">🚀</button>
+<button class="avatar" data-avatar="🎯">🎯</button>
+
+</div>
+
+<button class="primary full" id="createProfile">
+CREATE ACCOUNT
+</button>
+
+</div>
+</section>
+
+<!-- MAIN APP -->
+<div id="appShell" class="hidden">
 
 <main class="container">
 
 <!-- HOME -->
-
 <section id="home" class="page active">
 
-  <div class="card">
-    <h2>Welcome to Public Connect</h2>
+<div class="card">
+<h2>Welcome to PUBLIC CONNECT</h2>
+<p class="muted">Your Community. Your Voice.</p>
+</div>
 
-    <p class="muted">
-      Your Community. Your Voice.
-    </p>
+<div class="card">
 
-    <div class="row">
-      <div class="stat">
-        <strong id="homePostCount">0</strong>
-        <span class="muted">Posts</span>
-      </div>
+<h3>Create a Post</h3>
 
-      <div class="stat">
-        <strong id="homePollCount">0</strong>
-        <span class="muted">Polls</span>
-      </div>
+<textarea id="postText"
+          maxlength="1000"
+          placeholder="What's on your mind?"></textarea>
 
-      <div class="stat">
-        <strong id="homeMemberCount">0</strong>
-        <span class="muted">Members</span>
-      </div>
-    </div>
-  </div>
+<button class="primary full" id="publishPost">
+Publish Post
+</button>
 
-  <div class="card">
-    <h3>Create a Post</h3>
+</div>
 
-    <textarea id="postText"
-      maxlength="1000"
-      placeholder="What's on your mind?">
-    </textarea>
-
-    <button class="primary full" onclick="createPost()">
-      Publish Post
-    </button>
-
-    <p class="muted">
-      Text-only posts. Photo and video uploads are disabled.
-    </p>
-  </div>
-
-  <h3>Community Feed</h3>
-
-  <div id="postsList">
-    <p class="muted">Loading posts...</p>
-  </div>
+<div id="feed"></div>
 
 </section>
 
 <!-- POLLS -->
-
 <section id="polls" class="page">
-  <h2>Public Polls</h2>
 
-  <p class="muted">
-    Share your opinion by participating in community polls.
-  </p>
+<h2>Community Polls</h2>
 
-  <div id="pollList"></div>
-</section>
+<div class="card">
 
-<!-- QUIZ -->
+<input id="pollQuestion"
+       placeholder="Poll Question">
 
-<section id="quiz" class="page">
-  <h2>Daily Quiz</h2>
+<input id="pollA"
+       placeholder="Option 1">
 
-  <p class="muted">
-    Learn something new and collect community points.
-  </p>
+<input id="pollB"
+       placeholder="Option 2">
 
-  <div id="quizList"></div>
-</section>
+<input id="pollC"
+       placeholder="Option 3 (Optional)">
 
-<!-- CHAT -->
-
-<section id="chat" class="page">
-  <h2>Community Chat</h2>
-
-  <div class="card">
-
-    <div id="chatMessages"
-      style="max-height:350px;overflow-y:auto">
-      <p class="muted">Loading messages...</p>
-    </div>
-
-    <hr>
-
-    <textarea id="chatText"
-      maxlength="500"
-      placeholder="Write a message...">
-    </textarea>
-
-    <button class="primary full" onclick="sendChat()">
-      Send Message
-    </button>
-
-  </div>
-</section>
-
-<!-- LEADERBOARD -->
-
-<section id="leaderboard" class="page">
-  <h2>Leaderboard</h2>
-
-  <div class="card">
-    <p class="muted">
-      Community ranking based on points.
-    </p>
-
-    <div id="leaderboardList"></div>
-  </div>
-</section>
-
-<!-- PROFILE -->
-
-<section id="profile" class="page">
-  <h2>My Profile</h2>
-
-  <div class="card">
-
-    <div class="row">
-      <div class="avatar" id="profileAvatar">👤</div>
-
-      <div>
-        <h3 id="profileName">Member</h3>
-        <p class="muted" id="profileEmail"></p>
-      </div>
-    </div>
-
-    <hr>
-
-    <label>Display Name</label>
-    <input id="editName" placeholder="Your Name">
-
-    <label>Choose Avatar</label>
-
-    <select id="editAvatar">
-      <option>👤</option>
-      <option>🧑</option>
-      <option>👨</option>
-      <option>👩</option>
-      <option>🦁</option>
-      <option>⭐</option>
-      <option>🌟</option>
-      <option>🚀</option>
-      <option>🌍</option>
-    </select>
-
-    <button class="primary full" onclick="saveProfile()">
-      Save Profile
-    </button>
-
-    <hr>
-
-    <button class="danger full" onclick="logout()">
-      Logout
-    </button>
-
-  </div>
-</section>
-
-<!-- NOTIFICATIONS -->
-
-<section id="notifications" class="page">
-  <h2>Notifications</h2>
-
-  <div class="card">
-    <p class="muted">
-      You currently have no new notifications.
-    </p>
-  </div>
-</section>
-
-<!-- SETTINGS -->
-
-<section id="settings" class="page">
-  <h2>Settings</h2>
-
-  <div class="card">
-    <h3>Account Settings</h3>
-
-    <button class="secondary full"
-      onclick="showPage('profile')">
-      Edit Profile
-    </button>
-
-    <button class="secondary full"
-      style="margin-top:8px"
-      onclick="logout()">
-      Logout
-    </button>
-
-    <hr>
-
-    <h3>About Public Connect</h3>
-
-    <p class="muted">
-      Public Connect is a text-based community platform
-      designed for discussion, participation and learning.
-    </p>
-
-    <p class="muted">
-      Harassment, threats and sharing private information
-      are not allowed.
-    </p>
-  </div>
-</section>
-
-<!-- ADMIN DASHBOARD -->
-
-<section id="admin" class="page">
-  <h2>Admin Dashboard</h2>
-
-  <div class="notice">
-    Authorized administrators only.
-  </div>
-
-  <div class="row" style="margin-top:12px">
-
-    <div class="stat">
-      <strong id="adminUsers">0</strong>
-      <span class="muted">Users</span>
-    </div>
-
-    <div class="stat">
-      <strong id="adminPosts">0</strong>
-      <span class="muted">Posts</span>
-    </div>
-
-    <div class="stat">
-      <strong id="adminPolls">0</strong>
-      <span class="muted">Polls</span>
-    </div>
-
-  </div>
-
-  <div class="card">
-    <h3>Create Poll</h3>
-
-    <input id="pollQuestion" placeholder="Poll Question">
-    <input id="pollOption1" placeholder="Option 1">
-    <input id="pollOption2" placeholder="Option 2">
-    <input id="pollOption3" placeholder="Option 3 (Optional)">
-
-    <button class="primary full" onclick="createPoll()">
-      Publish Poll
-    </button>
-  </div>
-
-  <div class="card">
-    <h3>Create Quiz</h3>
-
-    <input id="quizQuestion" placeholder="Quiz Question">
-    <input id="quizOption1" placeholder="Option 1">
-    <input id="quizOption2" placeholder="Option 2">
-    <input id="quizOption3" placeholder="Option 3">
-    <input id="quizOption4" placeholder="Option 4">
-
-    <label class="muted">Correct Answer</label>
-
-    <select id="quizCorrect">
-      <option value="0">Option 1</option>
-      <option value="1">Option 2</option>
-      <option value="2">Option 3</option>
-      <option value="3">Option 4</option>
-    </select>
-
-    <button class="primary full" onclick="createQuiz()">
-      Publish Quiz
-    </button>
-  </div>
-
-  <div class="card">
-    <h3>Advertisement Space</h3>
-
-    <p class="muted">
-      This is a placeholder. Actual ads require an approved
-      advertising account and a secure integration.
-    </p>
-
-    <div class="notice">
-      Sponsored Advertisement
-    </div>
-  </div>
-
-</section>
-
-</main>
-
-<!-- BOTTOM NAVIGATION -->
-
-<nav class="nav">
-
-  <button class="active" onclick="showPage('home',this)">
-    <span class="icon">⌂</span>Home
-  </button>
-
-  <button onclick="showPage('polls',this)">
-    <span class="icon">📊</span>Polls
-  </button>
-
-  <button onclick="showPage('quiz',this)">
-    <span class="icon">🧠</span>Quiz
-  </button>
-
-  <button onclick="showPage('chat',this)">
-    <span class="icon">💬</span>Chat
-  </button>
-
-  <button onclick="showPage('leaderboard',this)">
-    <span class="icon">🏆</span>Rank
-  </button>
-
-  <button onclick="showPage('profile',this)">
-    <span class="icon">👤</span>Profile
-  </button>
-
-</nav>
+<button class="primary full" id="createPoll">
+Create Poll
+</button>
 
 </div>
 
-<script>
+<div id="pollList"></div>
 
-/* ======================================
-   FIREBASE CONFIGURATION
-   Replace these values with your own
-   Firebase Web App configuration.
-====================================== */
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="page">
+
+<h2>Daily Quiz</h2>
+
+<div id="quizList" class="card">
+<p>Daily Quiz will appear here.</p>
+<p class="muted">
+Secure quiz scoring requires server-side verification.
+</p>
+</div>
+
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard" class="page">
+
+<h2>Leaderboard</h2>
+
+<div id="leaderboardList"></div>
+
+</section>
+
+<!-- CHAT -->
+<section id="chat" class="page">
+
+<h2>Community Chat</h2>
+
+<div id="chatMessages"></div>
+
+<div class="card">
+
+<textarea id="chatText"
+          maxlength="500"
+          placeholder="Write a message..."></textarea>
+
+<button class="primary full" id="sendChat">
+Send Message
+</button>
+
+</div>
+
+</section>
+
+<!-- SEARCH -->
+<section id="search" class="page">
+
+<h2>Find People</h2>
+
+<input id="searchUsername"
+       placeholder="Search Username">
+
+<button class="primary full" id="searchBtn">
+Search
+</button>
+
+<div id="searchResults"></div>
+
+</section>
+
+<!-- NOTIFICATIONS -->
+<section id="notifications" class="page">
+
+<h2>Notifications</h2>
+
+<div id="notificationList" class="card">
+No notifications yet.
+</div>
+
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+
+<h2>My Profile</h2>
+
+<div class="card">
+
+<div id="myAvatar" class="avatar">🙂</div>
+
+<h3 id="myName"></h3>
+
+<p id="myUsername" class="muted"></p>
+
+<input id="editName" placeholder="Update Name">
+
+<input id="editUsername" placeholder="Update Username">
+
+<button class="primary full" id="saveProfile">
+Save Changes
+</button>
+
+</div>
+
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+
+<h2>Settings</h2>
+
+<div class="card">
+
+<button class="secondary full" id="editProfileBtn">
+Edit Profile
+</button>
+
+<button class="secondary full" id="installBtn">
+Install Web App
+</button>
+
+<button class="secondary full" id="logoutBtn">
+Logout
+</button>
+
+<p class="muted">
+Photo and video uploads are disabled.
+</p>
+
+</div>
+
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="admin" class="page">
+
+<h2>Admin Dashboard</h2>
+
+<div class="card">
+
+<p>Registered Users: <b id="adminUsers">—</b></p>
+
+<p>Posts: <b id="adminPosts">—</b></p>
+
+<p>Polls: <b id="adminPolls">—</b></p>
+
+<p class="muted">
+Admin access requires Firebase administrator permission.
+</p>
+
+</div>
+
+</section>
+
+<!-- ADVERTISEMENT -->
+<div class="card">
+
+<span class="tag">Sponsored</span>
+
+<p class="muted" style="margin-top:10px">
+Advertisement Area
+</p>
+
+<p class="muted">
+Approved advertisements will appear here.
+</p>
+
+</div>
+
+</main>
+
+<nav class="nav">
+
+<button data-page="home" class="active">⌂<br>Home</button>
+
+<button data-page="polls">▤<br>Polls</button>
+
+<button data-page="quiz">★<br>Quiz</button>
+
+<button data-page="chat">✉<br>Chat</button>
+
+<button data-page="search">⌕<br>Search</button>
+
+<button data-page="profile">●<br>Profile</button>
+
+<button data-page="settings">⚙<br>Settings</button>
+
+</nav>
+</div>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+sendPasswordResetEmail,
+signOut,
+RecaptchaVerifier,
+signInWithPhoneNumber,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+doc,
+getDoc,
+addDoc,
+setDoc,
+query,
+orderBy,
+limit,
+onSnapshot,
+serverTimestamp,
+runTransaction,
+getCountFromServer
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+/* FIREBASE CONFIGURATION */
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+
+apiKey:"YOUR_FIREBASE_API_KEY",
+
+authDomain:"YOUR_PROJECT_ID.firebaseapp.com",
+
+projectId:"YOUR_PROJECT_ID",
+
+storageBucket:"YOUR_PROJECT_ID.firebasestorage.app",
+
+messagingSenderId:"YOUR_SENDER_ID",
+
+appId:"YOUR_APP_ID"
+
 };
 
-/* Set your administrator email here. */
-const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@example.com";
+const app = initializeApp(firebaseConfig);
 
-firebase.initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+const db = getFirestore(app);
+
+const googleProvider = new GoogleAuthProvider();
 
 let currentUser = null;
-let currentProfile = {};
+let confirmationResult = null;
+let recaptchaVerifier = null;
+let selectedAvatar = "🙂";
+let installPrompt = null;
+let listeners = [];
 
-/* AUTHENTICATION */
+const $ = id => document.getElementById(id);
 
-function showSignup() {
-  document.getElementById("loginForm").classList.add("hidden");
-  document.getElementById("signupForm").classList.remove("hidden");
+function message(text) {
+alert(text);
 }
-
-function showLogin() {
-  document.getElementById("signupForm").classList.add("hidden");
-  document.getElementById("loginForm").classList.remove("hidden");
-}
-
-function authMessage(message) {
-  document.getElementById("authMessage").textContent = message;
-}
-
-async function signup() {
-  const name = document.getElementById("signupName").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const password = document.getElementById("signupPassword").value;
-
-  if (!name || !email || password.length < 6) {
-    authMessage("Enter your name, email and a password of at least 6 characters.");
-    return;
-  }
-
-  try {
-    const result = await auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
-
-    await db.collection("users").doc(result.user.uid).set({
-      name: name,
-      email: email,
-      avatar: "👤",
-      points: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-  } catch(error) {
-    authMessage(error.message);
-  }
-}
-
-async function login() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-
-  try {
-    await auth.signInWithEmailAndPassword(email,password);
-  } catch(error) {
-    authMessage(error.message);
-  }
-}
-
-async function googleLogin() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  try {
-    await auth.signInWithPopup(provider);
-  } catch(error) {
-    authMessage(error.message);
-  }
-}
-
-async function logout() {
-  await auth.signOut();
-}
-
-/* AUTH STATE */
-
-auth.onAuthStateChanged(async user => {
-
-  currentUser = user;
-
-  if (!user) {
-    document.getElementById("app").classList.add("hidden");
-    document.getElementById("authScreen").style.display = "flex";
-    return;
-  }
-
-  document.getElementById("authScreen").style.display = "none";
-  document.getElementById("app").classList.remove("hidden");
-
-  const userRef = db.collection("users").doc(user.uid);
-  const userSnap = await userRef.get();
-
-  if (!userSnap.exists) {
-    await userRef.set({
-      name: user.displayName || user.email.split("@")[0],
-      email: user.email,
-      avatar: "👤",
-      points: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }
-
-  await loadProfile();
-
-  loadPosts();
-  loadPolls();
-  loadQuizzes();
-  loadChat();
-  loadLeaderboard();
-  loadHomeStats();
-
-  if (user.email === ADMIN_EMAIL) {
-    loadAdminStats();
-  }
-
-});
 
 /* PAGE NAVIGATION */
 
-function showPage(page,button) {
+function showPage(page) {
 
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
-  });
+document.querySelectorAll(".page").forEach(p => {
+p.classList.remove("active");
+});
 
-  const target = document.getElementById(page);
+$(page)?.classList.add("active");
 
-  if (target) {
-    target.classList.add("active");
-  }
+document.querySelectorAll(".nav button").forEach(b => {
+b.classList.toggle("active",b.dataset.page===page);
+});
 
-  document.querySelectorAll(".nav button").forEach(b => {
-    b.classList.remove("active");
-  });
+if(page==="profile") loadProfile();
 
-  if (button) {
-    button.classList.add("active");
-  }
-}
+if(page==="notifications") loadNotifications();
 
-/* PROFILE */
-
-async function loadProfile() {
-
-  const snap = await db.collection("users")
-    .doc(currentUser.uid).get();
-
-  currentProfile = snap.data() || {};
-
-  document.getElementById("profileName").textContent =
-    currentProfile.name || "Member";
-
-  document.getElementById("profileEmail").textContent =
-    currentUser.email;
-
-  document.getElementById("profileAvatar").textContent =
-    currentProfile.avatar || "👤";
-
-  document.getElementById("editName").value =
-    currentProfile.name || "";
-
-  document.getElementById("editAvatar").value =
-    currentProfile.avatar || "👤";
-}
-
-async function saveProfile() {
-
-  const name = document.getElementById("editName").value.trim();
-  const avatar = document.getElementById("editAvatar").value;
-
-  if (!name) {
-    alert("Please enter your name.");
-    return;
-  }
-
-  await db.collection("users").doc(currentUser.uid).update({
-    name: name,
-    avatar: avatar
-  });
-
-  await loadProfile();
-
-  alert("Profile updated successfully!");
-}
-
-/* POSTS */
-
-async function createPost() {
-
-  const text = document.getElementById("postText").value.trim();
-
-  if (!text) {
-    alert("Please write something.");
-    return;
-  }
-
-  if (text.length > 1000) {
-    alert("Your post is too long.");
-    return;
-  }
-
-  try {
-
-    await db.collection("posts").add({
-      text: text,
-      uid: currentUser.uid,
-      name: currentProfile.name || "Member",
-      avatar: currentProfile.avatar || "👤",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    document.getElementById("postText").value = "";
-
-    alert("Post published successfully!");
-
-  } catch(error) {
-    alert(error.message);
-  }
-}
-
-function loadPosts() {
-
-  db.collection("posts")
-    .orderBy("createdAt","desc")
-    .limit(50)
-    .onSnapshot(snapshot => {
-
-      const box = document.getElementById("postsList");
-      box.innerHTML = "";
-
-      snapshot.forEach(doc => {
-
-        const post = doc.data();
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const head = document.createElement("div");
-        head.className = "post-head";
-
-        const avatar = document.createElement("span");
-        avatar.className = "avatar";
-        avatar.textContent = post.avatar || "👤";
-
-        const name = document.createElement("strong");
-        name.textContent = post.name || "Member";
-
-        head.append(avatar,name);
-
-        const content = document.createElement("p");
-        content.className = "post-text";
-        content.textContent = post.text || "";
-
-        card.append(head,content);
-        box.appendChild(card);
-
-      });
-
-      document.getElementById("homePostCount").textContent =
-        snapshot.size;
-
-    },error => console.error(error));
+if(page==="admin") loadAdmin();
 
 }
 
-/* POLLS */
+document.querySelectorAll(".nav button").forEach(button => {
 
-async function createPoll() {
+button.addEventListener("click",()=>{
+showPage(button.dataset.page);
+});
 
-  if (currentUser.email !== ADMIN_EMAIL) {
-    alert("Administrator access required.");
-    return;
-  }
+});
 
-  const question = document.getElementById("pollQuestion").value.trim();
+$("bellBtn").onclick=()=>showPage("notifications");
 
-  const options = [
-    document.getElementById("pollOption1").value.trim(),
-    document.getElementById("pollOption2").value.trim(),
-    document.getElementById("pollOption3").value.trim()
-  ].filter(Boolean);
+/* PHONE OTP LOGIN */
 
-  if (!question || options.length < 2) {
-    alert("Enter a question and at least two options.");
-    return;
-  }
+$("sendOtp").onclick=async()=>{
 
-  await db.collection("polls").add({
-    question: question,
-    options: options,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+try{
 
-  alert("Poll published successfully!");
+const number=$("phone").value.trim();
+
+if(!/^[0-9]{10}$/.test(number)){
+return message("Enter a valid 10 digit mobile number.");
 }
 
-function loadPolls() {
+if(!recaptchaVerifier){
 
-  db.collection("polls")
-    .orderBy("createdAt","desc")
-    .onSnapshot(snapshot => {
+recaptchaVerifier=new RecaptchaVerifier(
+auth,
+"recaptcha-container",
+{size:"normal"}
+);
 
-      const box = document.getElementById("pollList");
-      box.innerHTML = "";
-
-      snapshot.forEach(doc => {
-
-        const poll = doc.data();
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const title = document.createElement("h3");
-        title.textContent = poll.question;
-
-        card.appendChild(title);
-
-        (poll.options || []).forEach((option,index) => {
-
-          const button = document.createElement("button");
-          button.className = "option";
-          button.textContent = option;
-
-          button.onclick = () => vote(doc.id,index);
-
-          card.appendChild(button);
-
-        });
-
-        box.appendChild(card);
-
-      });
-
-      document.getElementById("homePollCount").textContent =
-        snapshot.size;
-
-    });
+await recaptchaVerifier.render();
 
 }
 
-async function vote(pollId,index) {
+confirmationResult=await signInWithPhoneNumber(
+auth,
+"+91"+number,
+recaptchaVerifier
+);
 
-  const ref = db.collection("polls")
-    .doc(pollId)
-    .collection("votes")
-    .doc(currentUser.uid);
+$("otpArea").classList.remove("hidden");
 
-  try {
+message("OTP sent successfully.");
 
-    await ref.set({
-      option: index,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+}catch(error){
 
-    alert("Your vote has been recorded.");
+console.error(error);
 
-  } catch(error) {
-    alert(error.message);
-  }
+message(error.message);
+
+if(recaptchaVerifier){
+recaptchaVerifier.clear();
+recaptchaVerifier=null;
+}
 
 }
 
-/* QUIZ */
+};
 
-async function createQuiz() {
+$("verifyOtp").onclick=async()=>{
 
-  if (currentUser.email !== ADMIN_EMAIL) {
-    alert("Administrator access required.");
-    return;
-  }
+try{
 
-  const question = document.getElementById("quizQuestion").value.trim();
+const code=$("otp").value.trim();
 
-  const options = [
-    document.getElementById("quizOption1").value.trim(),
-    document.getElementById("quizOption2").value.trim(),
-    document.getElementById("quizOption3").value.trim(),
-    document.getElementById("quizOption4").value.trim()
-  ];
-
-  if (!question || options.some(option => !option)) {
-    alert("Please complete the question and all four options.");
-    return;
-  }
-
-  const correctIndex =
-    Number(document.getElementById("quizCorrect").value);
-
-  await db.collection("quizzes").add({
-    question: question,
-    options: options,
-    correctIndex: correctIndex,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  alert("Quiz published!");
+if(!/^[0-9]{6}$/.test(code)){
+return message("Enter 6 digit OTP.");
 }
 
-function loadQuizzes() {
+if(!confirmationResult){
+return message("Please request OTP first.");
+}
 
-  db.collection("quizzes")
-    .orderBy("createdAt","desc")
-    .limit(20)
-    .onSnapshot(snapshot => {
+await confirmationResult.confirm(code);
 
-      const box = document.getElementById("quizList");
-      box.innerHTML = "";
+}catch(error){
 
-      snapshot.forEach(doc => {
+message(error.message);
 
-        const quiz = doc.data();
+}
 
-        const card = document.createElement("div");
-        card.className = "card";
+};
 
-        const title = document.createElement("h3");
-        title.textContent = quiz.question;
+/* GOOGLE LOGIN */
 
-        card.appendChild(title);
+$("googleBtn").onclick=async()=>{
 
-        (quiz.options || []).forEach((option,index) => {
+try{
 
-          const button = document.createElement("button");
-          button.className = "option";
-          button.textContent = option;
+await signInWithPopup(auth,googleProvider);
 
-          button.onclick = () => {
-            alert("Secure quiz scoring will require a server-side function.");
-          };
+}catch(error){
 
-          card.appendChild(button);
+message(error.message);
 
-        });
+}
 
-        box.appendChild(card);
+};
 
-      });
+/* EMAIL LOGIN AND SIGNUP */
 
-    });
+$("toggleEmail").onclick=()=>{
+$("emailArea").classList.toggle("hidden");
+};
+
+$("emailSignup").onclick=async()=>{
+
+try{
+
+const email=$("email").value.trim();
+
+const password=$("password").value;
+
+if(password.length<6){
+return message("Password must have at least 6 characters.");
+}
+
+await createUserWithEmailAndPassword(
+auth,email,password
+);
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+$("emailLogin").onclick=async()=>{
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+$("email").value.trim(),
+$("password").value
+);
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+$("resetPassword").onclick=async()=>{
+
+try{
+
+const email=$("email").value.trim();
+
+if(!email){
+return message("Enter your email first.");
+}
+
+await sendPasswordResetEmail(auth,email);
+
+message("Password reset email sent.");
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* AVATAR SELECTION */
+
+document.querySelectorAll("[data-avatar]").forEach(button=>{
+
+button.onclick=()=>{
+
+selectedAvatar=button.dataset.avatar;
+
+document.querySelectorAll("[data-avatar]").forEach(b=>{
+b.classList.remove("selected");
+});
+
+button.classList.add("selected");
+
+};
+
+});
+
+/* CREATE PROFILE */
+
+$("createProfile").onclick=async()=>{
+
+try{
+
+const name=$("newName").value.trim();
+
+const username=$("newUsername").value.trim().toLowerCase();
+
+if(name.length<2 || name.length>50){
+return message("Enter a valid name.");
+}
+
+if(!/^[a-z0-9_]{3,20}$/.test(username)){
+return message("Username must contain 3-20 letters, numbers or underscores.");
+}
+
+await runTransaction(db,async tx=>{
+
+const userRef=doc(db,"users",currentUser.uid);
+
+const usernameRef=doc(db,"usernames",username);
+
+const userSnap=await tx.get(userRef);
+
+const usernameSnap=await tx.get(usernameRef);
+
+if(userSnap.exists()){
+throw new Error("Profile already exists.");
+}
+
+if(usernameSnap.exists()){
+throw new Error("Username already taken.");
+}
+
+tx.set(userRef,{
+
+uid:currentUser.uid,
+
+name:name,
+
+username:username,
+
+avatar:selectedAvatar,
+
+createdAt:serverTimestamp()
+
+});
+
+tx.set(usernameRef,{
+uid:currentUser.uid
+});
+
+});
+
+$("profileSetup").classList.add("hidden");
+
+$("appShell").classList.remove("hidden");
+
+loadApplication();
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* UPDATE PROFILE */
+
+$("saveProfile").onclick=async()=>{
+
+try{
+
+const name=$("editName").value.trim();
+
+const username=$("editUsername").value.trim().toLowerCase();
+
+if(name.length<2 || name.length>50){
+return message("Enter a valid name.");
+}
+
+if(!/^[a-z0-9_]{3,20}$/.test(username)){
+return message("Invalid username.");
+}
+
+const userRef=doc(db,"users",currentUser.uid);
+
+await runTransaction(db,async tx=>{
+
+const snap=await tx.get(userRef);
+
+if(!snap.exists()) throw new Error("Profile not found.");
+
+const oldUsername=snap.data().username;
+
+const newRef=doc(db,"usernames",username);
+
+const newSnap=await tx.get(newRef);
+
+if(username!==oldUsername && newSnap.exists()){
+throw new Error("Username already taken.");
+}
+
+if(username!==oldUsername){
+
+tx.delete(doc(db,"usernames",oldUsername));
+
+tx.set(newRef,{uid:currentUser.uid});
+
+}
+
+tx.update(userRef,{name,username});
+
+});
+
+message("Profile updated.");
+
+loadProfile();
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* CREATE TEXT POST */
+
+$("publishPost").onclick=async()=>{
+
+try{
+
+const text=$("postText").value.trim();
+
+if(!text || text.length>1000){
+return message("Write a post up to 1000 characters.");
+}
+
+await addDoc(collection(db,"posts"),{
+
+uid:currentUser.uid,
+
+text:text,
+
+createdAt:serverTimestamp()
+
+});
+
+$("postText").value="";
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* LOAD FEED */
+
+function loadFeed(){
+
+const q=query(
+collection(db,"posts"),
+orderBy("createdAt","desc"),
+limit(30)
+);
+
+listeners.push(onSnapshot(q,async snapshot=>{
+
+const feed=$("feed");
+
+feed.replaceChildren();
+
+for(const item of snapshot.docs){
+
+const post=item.data();
+
+const userSnap=await getDoc(
+doc(db,"users",post.uid)
+);
+
+const user=userSnap.exists()
+?userSnap.data()
+:{name:"Member",username:"member",avatar:"🙂"};
+
+const card=document.createElement("div");
+
+card.className="card";
+
+const title=document.createElement("b");
+
+title.textContent=
+(user.avatar||"🙂")+" "+user.name+" @"+user.username;
+
+const body=document.createElement("p");
+
+body.textContent=post.text;
+
+card.append(title,body);
+
+feed.append(card);
+
+}
+
+},error=>message(error.message)));
+
+}
+
+/* CREATE POLL */
+
+$("createPoll").onclick=async()=>{
+
+try{
+
+const question=$("pollQuestion").value.trim();
+
+const options=[
+$("pollA").value.trim(),
+$("pollB").value.trim(),
+$("pollC").value.trim()
+].filter(Boolean);
+
+if(!question || options.length<2){
+return message("Enter question and at least two options.");
+}
+
+await addDoc(collection(db,"polls"),{
+
+uid:currentUser.uid,
+
+question,
+
+options,
+
+createdAt:serverTimestamp()
+
+});
+
+$("pollQuestion").value="";
+$("pollA").value="";
+$("pollB").value="";
+$("pollC").value="";
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* LOAD POLLS AND RESULTS */
+
+function loadPolls(){
+
+const q=query(
+collection(db,"polls"),
+orderBy("createdAt","desc"),
+limit(20)
+);
+
+listeners.push(onSnapshot(q,snapshot=>{
+
+const root=$("pollList");
+
+root.replaceChildren();
+
+snapshot.forEach(item=>{
+
+const poll=item.data();
+
+const card=document.createElement("div");
+
+card.className="card";
+
+const title=document.createElement("h3");
+
+title.textContent=poll.question;
+
+card.append(title);
+
+const results=document.createElement("p");
+
+results.className="muted";
+
+results.textContent="Loading results...";
+
+card.append(results);
+
+poll.options.forEach((option,index)=>{
+
+const button=document.createElement("button");
+
+button.className="choice";
+
+button.textContent=option;
+
+button.onclick=()=>vote(item.id,index);
+
+card.append(button);
+
+});
+
+root.append(card);
+
+const voteQuery=query(
+collection(db,"polls",item.id,"votes")
+);
+
+listeners.push(onSnapshot(voteQuery,votes=>{
+
+const counts=Array(poll.options.length).fill(0);
+
+votes.forEach(v=>{
+
+const index=v.data().optionIndex;
+
+if(Number.isInteger(index) && counts[index]!==undefined){
+counts[index]++;
+}
+
+});
+
+results.textContent="Results: "+
+poll.options.map((o,i)=>o+": "+counts[i]).join(" | ");
+
+}));
+
+});
+
+}));
+
+}
+
+async function vote(pollId,index){
+
+try{
+
+const pollSnap=await getDoc(doc(db,"polls",pollId));
+
+if(!pollSnap.exists()) return;
+
+if(index<0 || index>=pollSnap.data().options.length) return;
+
+await setDoc(
+doc(db,"polls",pollId,"votes",currentUser.uid),
+{
+uid:currentUser.uid,
+optionIndex:index,
+createdAt:serverTimestamp()
+}
+);
+
+message("Vote saved.");
+
+}catch(error){
+
+message(error.message);
+
+}
 
 }
 
 /* COMMUNITY CHAT */
 
-function loadChat() {
+$("sendChat").onclick=async()=>{
 
-  db.collection("chat")
-    .orderBy("createdAt","asc")
-    .limit(100)
-    .onSnapshot(snapshot => {
+try{
 
-      const box = document.getElementById("chatMessages");
-      box.innerHTML = "";
+const text=$("chatText").value.trim();
 
-      snapshot.forEach(doc => {
+if(!text || text.length>500) return;
 
-        const message = doc.data();
+await addDoc(collection(db,"messages"),{
 
-        const item = document.createElement("div");
-        item.style.padding = "8px";
-        item.style.borderBottom = "1px solid #244432";
+uid:currentUser.uid,
 
-        const name = document.createElement("strong");
-        name.textContent = message.name || "Member";
+text,
 
-        const text = document.createElement("p");
-        text.textContent = message.text || "";
-        text.style.margin = "5px 0";
+createdAt:serverTimestamp()
 
-        item.append(name,text);
-        box.appendChild(item);
+});
 
-      });
+$("chatText").value="";
 
-      box.scrollTop = box.scrollHeight;
+}catch(error){
 
-    });
+message(error.message);
 
 }
 
-async function sendChat() {
+};
 
-  const text = document.getElementById("chatText").value.trim();
+function loadChat(){
 
-  if (!text) return;
+const q=query(
+collection(db,"messages"),
+orderBy("createdAt","desc"),
+limit(40)
+);
 
-  if (text.length > 500) {
-    alert("Message is too long.");
-    return;
-  }
+listeners.push(onSnapshot(q,async snapshot=>{
 
-  try {
+const box=$("chatMessages");
 
-    await db.collection("chat").add({
-      text: text,
-      uid: currentUser.uid,
-      name: currentProfile.name || "Member",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+box.replaceChildren();
 
-    document.getElementById("chatText").value = "";
+for(const item of snapshot.docs.slice().reverse()){
 
-  } catch(error) {
-    alert(error.message);
-  }
+const data=item.data();
+
+const userSnap=await getDoc(
+doc(db,"users",data.uid)
+);
+
+const user=userSnap.exists()
+?userSnap.data()
+:{name:"Member",avatar:"🙂"};
+
+const card=document.createElement("div");
+
+card.className="card";
+
+const title=document.createElement("b");
+
+title.textContent=(user.avatar||"🙂")+" "+user.name;
+
+const body=document.createElement("p");
+
+body.textContent=data.text;
+
+card.append(title,body);
+
+box.append(card);
+
+}
+
+}));
+
+}
+
+/* SEARCH USERS */
+
+$("searchBtn").onclick=async()=>{
+
+try{
+
+const username=$("searchUsername").value.trim().toLowerCase();
+
+if(!/^[a-z0-9_]{3,20}$/.test(username)){
+return message("Enter a valid username.");
+}
+
+const usernameSnap=await getDoc(
+doc(db,"usernames",username)
+);
+
+const box=$("searchResults");
+
+box.replaceChildren();
+
+if(!usernameSnap.exists()){
+box.textContent="No user found.";
+return;
+}
+
+const userSnap=await getDoc(
+doc(db,"users",usernameSnap.data().uid)
+);
+
+if(!userSnap.exists()){
+box.textContent="No user found.";
+return;
+}
+
+const user=userSnap.data();
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.textContent=
+(user.avatar||"🙂")+" "+user.name+" @"+user.username;
+
+box.append(card);
+
+}catch(error){
+
+message(error.message);
+
+}
+
+};
+
+/* PROFILE */
+
+async function loadProfile(){
+
+const snap=await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+if(!snap.exists()) return;
+
+const user=snap.data();
+
+$("myAvatar").textContent=user.avatar||"🙂";
+
+$("myName").textContent=user.name;
+
+$("myUsername").textContent="@"+user.username;
+
+$("editName").value=user.name;
+
+$("editUsername").value=user.username;
 
 }
 
 /* LEADERBOARD */
 
-function loadLeaderboard() {
+function loadLeaderboard(){
 
-  db.collection("users")
-    .orderBy("points","desc")
-    .limit(20)
-    .onSnapshot(snapshot => {
+const q=query(
+collection(db,"users"),
+orderBy("createdAt","asc"),
+limit(20)
+);
 
-      const box = document.getElementById("leaderboardList");
-      box.innerHTML = "";
+listeners.push(onSnapshot(q,snapshot=>{
 
-      let rank = 1;
+const box=$("leaderboardList");
 
-      snapshot.forEach(doc => {
+box.replaceChildren();
 
-        const user = doc.data();
+let rank=1;
 
-        const item = document.createElement("div");
-        item.className = "row";
-        item.style.padding = "12px 0";
-        item.style.borderBottom = "1px solid #244432";
+snapshot.forEach(item=>{
 
-        const position = document.createElement("strong");
-        position.textContent = "#" + rank++;
+const user=item.data();
 
-        const avatar = document.createElement("span");
-        avatar.className = "avatar";
-        avatar.textContent = user.avatar || "👤";
+const card=document.createElement("div");
 
-        const name = document.createElement("span");
-        name.textContent = user.name || "Member";
+card.className="card";
 
-        const points = document.createElement("span");
-        points.className = "badge";
-        points.textContent = (user.points || 0) + " Points";
+card.textContent=
+"#"+rank+++" "+(user.avatar||"🙂")+" "+user.name;
 
-        item.append(position,avatar,name,points);
-        box.appendChild(item);
+box.append(card);
 
-      });
+});
 
-    });
+}));
 
 }
 
-/* HOME STATISTICS */
+/* QUIZ */
 
-async function loadHomeStats() {
+function loadQuiz(){
 
-  try {
+$("quizList").textContent=
+"Daily quiz questions are not published yet. Secure scoring needs a trusted backend.";
 
-    const users = await db.collection("users").get();
+}
 
-    document.getElementById("homeMemberCount").textContent =
-      users.size;
+/* NOTIFICATIONS */
 
-  } catch(error) {
-    console.error(error);
-  }
+function loadNotifications(){
+
+$("notificationList").textContent=
+"No notifications yet.";
 
 }
 
 /* ADMIN DASHBOARD */
 
-async function loadAdminStats() {
+async function loadAdmin(){
 
-  if (currentUser.email !== ADMIN_EMAIL) return;
+try{
 
-  document.getElementById("admin").classList.remove("hidden");
+const token=await currentUser.getIdTokenResult(true);
 
-  const users = await db.collection("users").get();
-  const posts = await db.collection("posts").get();
-  const polls = await db.collection("polls").get();
+if(token.claims.admin!==true){
 
-  document.getElementById("adminUsers").textContent = users.size;
-  document.getElementById("adminPosts").textContent = posts.size;
-  document.getElementById("adminPolls").textContent = polls.size;
+message("Admin access denied.");
+
+showPage("home");
+
+return;
+
+}
+
+const [users,posts,polls]=await Promise.all([
+
+getCountFromServer(collection(db,"users")),
+
+getCountFromServer(collection(db,"posts")),
+
+getCountFromServer(collection(db,"polls"))
+
+]);
+
+$("adminUsers").textContent=users.data().count;
+
+$("adminPosts").textContent=posts.data().count;
+
+$("adminPolls").textContent=polls.data().count;
+
+}catch(error){
+
+message(error.message);
+
+}
+
+}
+
+/* LOAD APP */
+
+function loadApplication(){
+
+listeners.forEach(fn=>fn());
+
+listeners=[];
+
+loadFeed();
+
+loadPolls();
+
+loadChat();
+
+loadLeaderboard();
+
+loadQuiz();
+
+loadProfile();
+
+}
+
+/* AUTH STATE */
+
+onAuthStateChanged(auth,async user=>{
+
+currentUser=user;
+
+if(!user){
+
+listeners.forEach(fn=>fn());
+
+listeners=[];
+
+$("authScreen").classList.remove("hidden");
+
+$("profileSetup").classList.add("hidden");
+
+$("appShell").classList.add("hidden");
+
+return;
+
+}
+
+try{
+
+const snap=await getDoc(doc(db,"users",user.uid));
+
+if(snap.exists()){
+
+$("authScreen").classList.add("hidden");
+
+$("profileSetup").classList.add("hidden");
+
+$("appShell").classList.remove("hidden");
+
+loadApplication();
+
+}else{
+
+$("authScreen").classList.add("hidden");
+
+$("appShell").classList.add("hidden");
+
+$("profileSetup").classList.remove("hidden");
+
+}
+
+}catch(error){
+
+message(error.message);
+
+}
+
+});
+
+/* ADMIN BUTTON IN SETTINGS */
+
+const adminButton=document.createElement("button");
+
+adminButton.className="secondary full";
+
+adminButton.textContent="Admin Dashboard";
+
+adminButton.onclick=()=>showPage("admin");
+
+document.querySelector("#settings .card").append(adminButton);
+
+/* LOGOUT */
+
+$("logoutBtn").onclick=async()=>{
+
+listeners.forEach(fn=>fn());
+
+listeners=[];
+
+await signOut(auth);
+
+};
+
+/* PWA INSTALL */
+
+window.addEventListener("beforeinstallprompt",event=>{
+
+event.preventDefault();
+
+installPrompt=event;
+
+});
+
+$("installBtn").onclick=async()=>{
+
+if(!installPrompt){
+
+return message("Open browser menu and choose Add to Home Screen.");
+
+}
+
+installPrompt.prompt();
+
+installPrompt=null;
+
+};
+
+/* HIDE WEBSITE APK BUTTON IN INSTALLED APP */
+
+if(
+window.matchMedia("(display-mode: standalone)").matches ||
+window.navigator.standalone===true
+){
+
+$("apkWebsiteButton").classList.add("hidden");
 
 }
 
 /* SERVICE WORKER */
 
-if ("serviceWorker" in navigator) {
+if("serviceWorker" in navigator){
 
-  window.addEventListener("load", () => {
-
-    navigator.serviceWorker.register("./sw.js")
-      .catch(error => console.log("Service Worker:",error));
-
-  });
+navigator.serviceWorker.register("./sw.js")
+.catch(console.error);
 
 }
 
 </script>
-
 </body>
 </html>
